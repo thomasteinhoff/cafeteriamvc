@@ -81,17 +81,13 @@ namespace Cafeteria.Controllers
             _context.Order.Add(order);
             await _context.SaveChangesAsync();
 
-            // Recupera o pedido que acabou de ser salvo para ter acesso ao seu ID
             Order ?o = await _context.Order.FindAsync(order.Id);
 
-            // Retorna um erro caso a consulta ao BD falhe
             if(o==null)
                 return BadRequest();
 
-            // Cria uma lista de OrderItem
             List<OrderItem>orderItems = new List<OrderItem>();
 
-            // Instancia um OrderItem para cada elemento salvo em TempData
             foreach(string key in TempData.Keys)
             {
             
@@ -107,11 +103,9 @@ namespace Cafeteria.Controllers
                     Quantity = int.Parse(stringValue)
                 };
 
-                // Adiociona o OrderItem criado ao DbContext
                 _context.OrderItem.Add(orderItem);
                 orderItems.Add(orderItem);
 
-                // Qtualiza a quantidade do produto consumido no pedido
                 Product? productUpdate = await _context.Product.FindAsync(int.Parse(key));
 
                 if(productUpdate==null)
@@ -122,7 +116,6 @@ namespace Cafeteria.Controllers
                 _context.Product.Update(productUpdate);
             }
 
-            // Persiste todas as alterações realizadas no banco de dados
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
@@ -131,21 +124,16 @@ namespace Cafeteria.Controllers
         [HttpPost]
         public async Task<ActionResult> AddProduct (OrderCreateViewModel viewModel)
         { 
-            // Recupera todos os produtos do BD
             var products = await _context.Product.ToListAsync();
-            // Seleciona apenas os produtos cujo atributo Quantidade é diferente de zero
             products = products.Where(p => p.Quantity!=0).ToList();
 
-            // Valida se a consulta ao banco teve sucesso
             if(products==null)
                 return NotFound();
 
-            // Valida se o produto selecionado pelo usuário no dropdown foi encontrado no BD
             Product? stockCheck = products.Find(p=>p.Id==viewModel.SelectedProductId);
             if(stockCheck==null)
                 return NotFound();
 
-            // Verifica se a quantidade solicitada no produto e suficiente no estoque
             if(stockCheck.Quantity >= viewModel.Quantity)
             {
                 TempData[viewModel.SelectedProductId.ToString()]=viewModel.Quantity;
@@ -156,7 +144,6 @@ namespace Cafeteria.Controllers
 
             viewModel.TotalPrice = 0;
 
-            // Salva os dados do produto selecionado em TempData para a próxima seção
             foreach (var key in TempData.Keys)
             {
                 TempData.Keep(key);
@@ -167,7 +154,6 @@ namespace Cafeteria.Controllers
                     viewModel.TotalPrice += p.Price * int.Parse(q);
             }
 
-            // Reabastece a lista de produtos para o dropdown
             viewModel.ProductsSelectList = products.Select(p => new SelectListItem 
                 {
                     Value = p.Id.ToString(),
@@ -175,7 +161,6 @@ namespace Cafeteria.Controllers
                 });
             viewModel.Products = products;
 
-            // Retorna a ViewModel para View/Order/Create
             return View("Create",viewModel);
         }
 

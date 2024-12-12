@@ -8035,11 +8035,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Projetos\\aulas back\\ProjetoCafeteria\\Cafeteria.csproj",
+      "projectUniqueName": "C:\\Projetos\\aulas back\\cafeteriamvc\\Cafeteria.csproj",
       "projectName": "Cafeteria",
-      "projectPath": "C:\\Projetos\\aulas back\\ProjetoCafeteria\\Cafeteria.csproj",
+      "projectPath": "C:\\Projetos\\aulas back\\cafeteriamvc\\Cafeteria.csproj",
       "packagesPath": "C:\\Users\\thoma\\.nuget\\packages\\",
-      "outputPath": "C:\\Projetos\\aulas back\\ProjetoCafeteria\\obj\\",
+      "outputPath": "C:\\Projetos\\aulas back\\cafeteriamvc\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\thoma\\AppData\\Roaming\\NuGet\\NuGet.Config"
